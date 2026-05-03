@@ -1,0 +1,83 @@
+%!TEX encoding = UTF-8 Unicode
+%!TEX program = xelatex
+
+% 论文类型：doctor=博士, master=硕士, bachelor=学士
+\documentclass[bachelor]{hnuthesis}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{algorithmicx,algpseudocode}
+\usepackage{float}
+
+\hnucode{11342} % 学校代码
+\hnuname{湖南工程学院}  % 学校名称
+\enhnuname{Hunan Institute of Engineering}  % 学校名称（英文）
+\degree{学士}   % 学位类别
+\clc{TP391}  % 中图分类号
+\secrettext{公开}  % 密级       
+
+% 标题
+\title{基于三重罗生门的多层次防护系统\titlebr 的设计与优化研究}
+\entitle{Research on the Design and Optimization of Multi-Level Protection System Based on Triple Rashomon}
+% 作者
+\author{大蛇丸}
+\enauthor{Shewan Da}
+% 学号
+\authorid{201903120205}
+% 班级（学士论文需要）
+\class{2201}
+% 学院
+\college{木叶学院}
+% 专业
+\major{忍术工程} 
+\enmajor{Ninja Engineering}
+%学士学位获得学校，年份
+% \enbachelor{B.E.~(Hunan University)201x}
+% \enmaster{M.S.~(Hunan University)2020}
+% \endoctor{Master of engineering}
+% 研究方向
+\workon{忍术研究}
+% 导师
+\supervisor{猿飞日斩\ 教授}
+\ensupervisor{Professor Rizhan Yuanfei}
+% 论文提交、答辩日期
+\submitdate{2026年5月}
+\defensedate{2026年5月}
+\endate{May, 2026}
+% 答辩委员会主席
+\chair{待定}
+
+\begin{document}
+% 封面、原创性声明
+\maketitle
+
+% 摘要
+\input{chapters/abstract}
+% 目录
+\tableofcontents
+% 插图附表索引
+\begingroup
+    \renewcommand*{\addvspace}[1]{}
+        \phantomsection
+        \listoffigures
+        \newpage
+
+        \phantomsection
+        \listoftables
+        \newpage
+\endgroup
+
+% 正文章节
+\mainmatter
+\input{chapters/ch1}
+\input{chapters/ch2}
+\input{chapters/summary}
+\bibliography{references}
+
+\appendix
+\input{chapters/publications}
+\input{chapters/projects}
+
+\backmatter
+\input{chapters/acknowledgements}
+
+\end{document}
