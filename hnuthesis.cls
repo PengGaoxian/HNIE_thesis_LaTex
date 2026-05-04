@@ -28,20 +28,13 @@
 % ============================================================================
 % 第2部分: 类加载
 % ============================================================================
-% 定义一个布尔变量@hnu@addtocspace，是否在目录中添加空格
-\newif\if@hnu@addtocspace 
-% 如果启用了PDF选项，则传递oneside选项给book类，表示单面打印
 \if@hnu@pdf
-    \PassOptionsToClass{oneside}{book}
+    \PassOptionsToClass{oneside}{book}  % PDF 模式下走单面排版
 \fi
-% 传递no-math选项给fontspec包，禁用数学字体
-\PassOptionsToPackage{no-math}{fontspec}
-% 加载ctexbook类，设置UTF8编码、A4纸张、任意页开始新章节、小四号字体
-% \LoadClass[UTF8, a4paper, openright, zihao=-4]{ctexbook}[2015/05/14]
+\PassOptionsToPackage{no-math}{fontspec}  % 让 fontspec 不接管数学字体
 \LoadClass[UTF8, a4paper, oneside, zihao=-4]{ctexbook}[2015/05/14]
-% 加载etoolbox包，用于修改类的内部命令
 \RequirePackage{etoolbox}
-% 如果当前的ctexbook类版本早于2015/05/14，则报错，提示用户更新ctex包
+% ctex 2.0 之前的接口不兼容，必须升级
 \@ifclasslater{ctexbook}{2015/05/14}{}{%
     \ClassError{hnuthesis}{%
         Requiring ctex 2.0 or later version!\MessageBreak
@@ -111,7 +104,6 @@
 % 设置中文字体（使用系统字体名，Windows 徽标键 + R -> fc-list :lang=zh 查看可用字体）
 \setCJKmainfont{SimSun}[AutoFakeBold=true] % 设置中文字体为宋体，加粗效果为伪粗体
 \setCJKsansfont{SimHei} % 设置中文无衬线字体为黑体
-% \ziju{0.05} % 设置字间距为0.05em
 
 % 加载hyperref包，设置PDF元数据、超链接颜色、超链接样式
 \RequirePackage{hyperref}
@@ -173,32 +165,34 @@
     }
     \csname #1\endcsname{}  % 立即调用该命令，并初始化为空值
 }
-\hnu@define@term{hnucode} % 定义全局变量 \hnu@hnucode，用于存储学校代号
-\hnu@define@term{hnuname} % 定义全局变量 \hnu@hnuname，用于存储学校名称
-\hnu@define@term{degree} % 定义全局变量 \hnu@degree，用于存储学位类型
-\hnu@define@term{title}   % 定义全局变量 \hnu@title，用于存储论文标题
-\hnu@define@term{clc}     % 定义全局变量 \hnu@clc，用于存储中图分类号
-\hnu@define@term{secrettext}  % 定义全局变量 \hnu@secrettext，用于存储密级
-\hnu@define@term{author}      % 定义全局变量 \hnu@author，用于存储作者姓名
-\hnu@define@term{authorid}    % 定义全局变量 \hnu@authorid，用于存储学号
-\hnu@define@term{class}        % 定义全局变量 \hnu@class，用于存储班级
-\hnu@define@term{college}     % 定义全局变量 \hnu@college，用于存储学院
-\hnu@define@term{major}       % 定义全局变量 \hnu@major，用于存储专业
-\hnu@define@term{workon}      % 定义全局变量 \hnu@workon，用于存储研究方向
-\hnu@define@term{supervisor}  % 定义全局变量 \hnu@supervisor，用于存储导师姓名
-\hnu@define@term{cosupervisor}  % 定义全局变量 \hnu@cosupervisor，用于存储第二导师姓名
-\hnu@define@term{submitdate}    % 定义全局变量 \hnu@submitdate，用于存储论文提交日期
-\hnu@define@term{defensedate}   % 定义全局变量 \hnu@defensedate，用于存储论文答辩日期
-\hnu@define@term{chair}       % 定义全局变量 \hnu@chair，用于存储答辩委员会主席
-\hnu@define@term{entitle}     % 定义全局变量 \hnu@entitle，用于存储英文标题
-\hnu@define@term{enauthor}    % 定义全局变量 \hnu@enauthor，用于存储英文作者姓名
-\hnu@define@term{enmajor}     % 定义全局变量 \hnu@enmajor，用于存储英文专业
-\hnu@define@term{endoctor}    % 定义全局变量 \hnu@endoctor，用于存储英文学位
-\hnu@define@term{enmaster}    % 定义全局变量 \hnu@enmaster，用于存储英文学位
-\hnu@define@term{enbachelor}  % 定义全局变量 \hnu@enbachelor，用于存储英文学位
-\hnu@define@term{enhnuname}   % 定义全局变量 \hnu@enhnuname，用于存储英文学校名称
-\hnu@define@term{ensupervisor}  % 定义全局变量 \hnu@ensupervisor，用于存储英文导师姓名
-\hnu@define@term{endate}    % 定义全局变量 \hnu@endate，用于存储英文日期
+% 通过 \hnu@define@term{xxx} 生成 \xxx 命令与 \hnu@xxx 全局变量。
+% 用户在 main.tex 中调用 \xxx{...} 设置内容，类内通过 \hnu@xxx 取值。
+\hnu@define@term{hnucode}        % 学校代号
+\hnu@define@term{hnuname}        % 学校名称
+\hnu@define@term{degree}         % 学位类型
+\hnu@define@term{title}          % 论文标题
+\hnu@define@term{clc}            % 中图分类号
+\hnu@define@term{secrettext}     % 密级
+\hnu@define@term{author}         % 作者姓名
+\hnu@define@term{authorid}       % 学号
+\hnu@define@term{class}          % 班级
+\hnu@define@term{college}        % 学院
+\hnu@define@term{major}          % 专业
+\hnu@define@term{workon}         % 研究方向
+\hnu@define@term{supervisor}     % 导师姓名
+\hnu@define@term{cosupervisor}   % 第二导师 / 实践导师
+\hnu@define@term{submitdate}     % 提交日期
+\hnu@define@term{defensedate}    % 答辩日期
+\hnu@define@term{chair}          % 答辩委员会主席
+\hnu@define@term{entitle}        % 英文标题
+\hnu@define@term{enauthor}       % 英文作者姓名
+\hnu@define@term{enmajor}        % 英文专业
+\hnu@define@term{endoctor}       % 英文学位（博士）
+\hnu@define@term{enmaster}       % 英文学位（硕士）
+\hnu@define@term{enbachelor}     % 英文学位（学士）
+\hnu@define@term{enhnuname}      % 英文学校名称
+\hnu@define@term{ensupervisor}   % 英文导师姓名
+\hnu@define@term{endate}         % 英文日期
 
 % ============================================================================
 % 第5部分: 题注与引用名称
@@ -208,12 +202,15 @@
 \ifcase\hnu@degree@type
   \newcommand\hnu@thesisname{博士学位论文}%
   \newcommand\hnu@yemeiname{\hnu@hnuname 博士学位论文}%
+  \newcommand\hnu@enthesisname{A Dissertation Submitted for the Doctor Degree}%
 \or
   \newcommand\hnu@thesisname{硕士学位论文}%
   \newcommand\hnu@yemeiname{\hnu@hnuname 硕士学位论文}%
+  \newcommand\hnu@enthesisname{A Thesis Submitted for the Master Degree}%
 \or
   \newcommand\hnu@thesisname{毕业设计（论文）}%
   \newcommand\hnu@yemeiname{\hnu@title}%
+  \newcommand\hnu@enthesisname{}%
 \fi
 
 % 表格：
@@ -233,45 +230,28 @@
 \newcommand\hnu@tocname{目\quad 录}   % 定义目录部分的名称为“目  录”
 \newcommand\hnu@summaryname{总结与展望}   % 定义总结与展望部分的名称为“总结与展望”
 \newcommand\hnu@notationname{符号说明}    % 定义符号说明部分的名称为“符号说明”
-% 重定义LaTex中自动引用功能（使用\autoref命令）时的显示内容
-% 当自动引用公式时，显示为“公式（编号）”
-\def\equationautorefname~#1\null{公式~(#1)\null}%   
-% 当自动引用脚注时，显示为“脚注”
+% 自定义 \autoref 引用前缀（中文）
+\def\equationautorefname~#1\null{公式~(#1)\null}%
 \def\footnoteautorefname{脚注}%
-% 当自动引用列表项时，显示为”第（编号）项”
 \def\itemautorefname~#1\null{第~#1~项\null}%
-% 当自动引用图时，显示为“图”
 \def\figureautorefname{图}%
-% 当自动引用表格时，显示为“表”
 \def\tableautorefname{表}%
-% 当自动引用部分（part）时，显示为“第（编号）部分”
 \def\partautorefname~#1\null{第~#1~部分\null}%
-% 当自动引用附录时不显示前缀
 \def\appendixautorefname{}%
-% 当自动引用章节时，显示为“第（编号）章”
 \def\chapterautorefname~#1\null{第~#1~章\null}%
-% 当自动引用节（section）时，显示为“第（编号）节”
 \def\sectionautorefname~#1\null{第~#1~节\null}%
-% 当自动引用小节（subsection）时，显示为“第（编号）小节”
 \def\subsectionautorefname~#1\null{第~#1~小节\null}%
-% 当自动引用小小节（subsubsection）时，显示为“第（编号）小小节”
 \def\subsubsectionautorefname~#1\null{第~#1~小小节\null}%
-% 当自动引用段落（paragraph）时，显示为“第（编号）段”
 \def\paragraphautorefname~#1\null{第~#1~段\null}%
-% 当自动引用小段（subparagraph）时，显示为“第（编号）小段”
 \def\subparagraphautorefname~#1\null{第~#1~小段\null}%
-% 当自动引用定理（theorem）时，显示为“定理”
 \def\theoremautorefname{定理}%
-% 当自动引用引理（lemma）时，显示为“引理”
 \def\pageautorefname~#1\null{第~#1~页\null}%
 
 % ============================================================================
 % 第6部分: 页面与列表设置
 % ============================================================================
-% 页面设置
-% 加载geometry宏包，用于自定义页面布局
+% 页面尺寸与边距
 \RequirePackage{geometry}
-% 使用geometry宏包设置页面尺寸和边距
 \geometry{
     paper=a4paper,
     top=\hnu@page@top, bottom=\hnu@page@bottom,
@@ -281,85 +261,64 @@
     footskip=\hnu@page@footskip
 }
 
-% 加载fancyhdr宏包，用于自定义页眉和页脚
+% 页眉页脚样式
 \RequirePackage{fancyhdr}
-% 定义页眉的横线粗细，0.4pt表示横线的厚度
 \renewcommand{\headrulewidth}{0.4pt}
-% 定义自定义的页眉样式 hnu@headings
 \fancypagestyle{hnu@headings}{%
   \fancyhf{}%
     \fancyhead[CO]{\setfontsize{\hnu@font@header}\hnu@yemeiname}
     \fancyfoot[C]{\setfontsize{\hnu@font@header}\thepage}
-  \fancyheadoffset[LO,LE]{3mm}                      % 左侧页眉（LO：左侧页眉奇数页，LE：左侧页眉偶数页）向右偏移量为3mm
-  \fancyheadoffset[RO,RE]{-3mm}                     % 右页页眉（RO：右侧页眉奇数页，RE：右侧页眉偶数页）向左偏移量为-3mm
+  \fancyheadoffset[LO,LE]{3mm}                      % 奇数页页眉左偏 3mm
+  \fancyheadoffset[RO,RE]{-3mm}                     % 偶数页页眉右偏 3mm
 
-  \makeatletter  % 使@成为普通字母，通常配合\makeatother使用
+  % 重定义页眉横线：粗 0.5pt，紧贴文本
   \def\headrule{
-    % 判断是否为普通页面，如果是，使用普通的页眉线宽；否则使用plainheadrulewidth的页眉线宽
     \if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
-    \hrule\@height 0.5pt \@width\headwidth  % 线粗0.5pt
-    % 设置与正文的垂直间距
+    \hrule\@height 0.5pt \@width\headwidth
     \vskip-2\headrulewidth
-    \vskip-1pt     
+    \vskip-1pt
   }
-    \vspace{7mm} % 设置页眉与正文的垂直间距为7mm
+    \vspace{7mm}                                    % 页眉与正文的垂直间距
 }%
 
-% 定义一个名为hnu@notation的页脚样式，在该样式下，页脚内容为空
+% 符号说明页使用空白页脚
 \fancypagestyle{hnu@notation}{\fancyfoot{}}
-% 设置文档的默认页眉样式为hnu@headings
 \pagestyle{hnu@headings}
-% 重定义chaptermark命令，使得章节标题可以正确显示在页眉中
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-% 重定义\cleardoublepage命令，如果文档是双面打印，并且当前页为偶数页，则插入空白页，使得下一章从奇数页开始
+
+% 双面排版时，cleardoublepage 在偶数页插入空白以便下一章从奇数页开始
 \renewcommand*{\cleardoublepage}{
-    \clearpage  % 结束当前页
-    \if@twoside % 如果是双面打印
-        \ifodd\c@page   % 如果当前页为奇数页
-        \else           % 如果当前页为偶数页
-            \hbox{}     % 插入一个空盒子占位
-            \thispagestyle{empty} % 当前页的样式为空白页样式
-            \newpage    % 插入一个新的空白页
-            \if@twocolumn % 如果是双栏排版
-                \hbox{}   % 插入一个空盒子占位
-                \newpage  % 插入一个新的空白页
+    \clearpage
+    \if@twoside
+        \ifodd\c@page
+        \else
+            \hbox{}
+            \thispagestyle{empty}
+            \newpage
+            \if@twocolumn
+                \hbox{}
+                \newpage
             \fi
         \fi
     \fi
 }
 
-% 为\fontmatter部分（前言部分）增加自定义行为
+% 前言部分使用大写罗马数字页码
 \g@addto@macro\frontmatter{%
-    % 使用大写罗马数字编号
-    \pagenumbering{Roman}%  
+    \pagenumbering{Roman}%
 }
 
-% 重定义\mainmatter命令，用于切换到文档的主体部分，插入新页并开始使用阿拉伯数字进行页码编号
+% 主体部分使用阿拉伯数字页码，自奇数页开始
 \renewcommand\mainmatter{%
-  \cleardoublepage        % 使章节从新的奇数页开始
-  \pagenumbering{arabic}% % 使用阿拉伯数字进行页码编号
-  \@mainmattertrue        % 设置\@mainmatter为真，表示当前处于文档的主体部分
+  \cleardoublepage
+  \pagenumbering{arabic}%
+  \@mainmattertrue
 }
 
-% 列表
-% 加载enumitem宏包，用于自定义列表的格式
+% 列表样式：左缩进 3em，零间距
 \RequirePackage{enumitem}
-% 自定义无需列表（itemize）的格式
-\setitemize{
-    leftmargin=3em, % 左边缩进为3em
-    itemsep=0em,    % 列表项之间的间距为0em
-    partopsep=0em,  % 列表前后额外间距为0em
-    parsep=0em,     % 段落间距为0em
-    topsep=-0em     % 列表顶部的额外间距为0em
-}
-% 自定义有序列表（enumerate）的格式
-\setenumerate{
-    leftmargin=3em, % 左边缩进为3em
-    itemsep=0em,    % 列表项之间的间距为0em
-    partopsep=0em,  % 列表前后额外间距为0em
-    parsep=0em,     % 段落间距为0em
-    topsep=0em      % 列表顶部的额外间距为0em
-}
+\setitemize{leftmargin=3em, itemsep=0em, partopsep=0em, parsep=0em, topsep=-0em}
+\setenumerate{leftmargin=3em, itemsep=0em, partopsep=0em, parsep=0em, topsep=0em}
 
 % ============================================================================
 % 第7部分: 章节格式与书签
@@ -386,31 +345,20 @@
     \ding{\the\numexpr\value{#1}+191\relax}
 }
 
-% 加载stringstrings宏包，用于操作字符串，比如计算字符串长度
+% 章节标题字距动态调整：标题字数少时增加字距，使视觉宽度接近
+% 2 字 -> ziju 2，3 字 -> 1，4 字 -> 0.5，5 字及以上保持默认
 \RequirePackage{stringstrings}
-% 定义计数器titlelength，用于存储字符串长度
 \newcounter{titlelength}
-% 定义自定义命令spacetitle，根据标题的长度调整字间距
-% 设计原理：为了美观，章节标题字数较少时需要增加字间距来达到视觉平衡
-% - 2字标题：字间距 2pt（最大间距）
-% - 3字标题：字间距 1pt
-% - 4字标题：字间距 0.5pt（最小间距）
-% - 5字及以上：默认间距
 \newcommand\spacetitle[1]{%
-    % 计算字符串#1的长度，并将其存储在titlelength计数器中
     \@getstringlength{#1}{titlelength}%
-    % 如果字符串长度为2，使用ziju命令将字间距设为2并输出标题
     \ifnum\thetitlelength=2
-        {\ziju{2}#1} 
+        {\ziju{2}#1}
     \else%
-        % 如果字符串长度为3，设置字间距为1
         \ifnum\thetitlelength=3
             {\ziju{1}#1}
         \else%
-            % 如果字符串长度为4，设置字间距为0.5
             \ifnum\thetitlelength=4
                 {\ziju{0.5}#1}
-            % 如果字符串长度大于4，保持默认字间距
             \else
                 #1%
             \fi
@@ -418,77 +366,62 @@
     \fi
 }
 
-% 设置章节编号深度，允许最多显示到5级（即章、节、副节、段落等）
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{5}                          % 编号深度到 subparagraph
 
-% 使用ctexset命令自定义章、节、副节等部分的格式
+% 章 / 节 / 小节等格式
 \ctexset{
     chapter = {
-        format      = \centering\sffamily\bfseries\setfontsize{\hnu@font@chapter}, % 居中，使用无衬线字体、加粗，字号18pt
-        nameformat  = {}, % 不设置章名称的格式
-        number      = \thechapter,  % 使用阿拉伯数字显示章节号
-        aftername   = \hspace{\ccwd}, % 在章号后加入一个中文字符宽度的空格
-        beforeskip  = -1.5em, % 24bp - 31bp % 在章标题前的垂直间距为-1.5em
-        afterskip   = 1.5em, % 18bp - 10bp  % 在章标题后的垂直间距为1.5em
-        % fixskip   = true, % will be used in future version
+        format      = \centering\sffamily\bfseries\setfontsize{\hnu@font@chapter},
+        nameformat  = {},
+        number      = \thechapter,
+        aftername   = \hspace{\ccwd},
+        beforeskip  = -1.5em,                                 % 章标题前留白
+        afterskip   = 1.5em,                                  % 章标题后留白
     },
     section = {
-        format     = \bf\sffamily\setfontsize{\hnu@font@section},  % 加粗，无衬线字体，字号15pt
-        aftername  = \hspace{\ccwd},    % 在节标题后加一个中文字符宽度的空格
-        beforeskip = 12pt,    % 标题前的垂直间距为12pt
-        afterskip  = 12pt,    % 标题后的垂直间距为12pt
+        format     = \bf\sffamily\setfontsize{\hnu@font@section},
+        aftername  = \hspace{\ccwd},
+        beforeskip = 12pt,
+        afterskip  = 12pt,
     },
     subsection = {
-        format     = \bf\sffamily\setfontsize{\hnu@font@subsection},  % 加粗，无衬线字体，字号14pt
-        aftername  = \hspace{\ccwd},    % 在副节标题后加一个中文字符宽度的空格
-        % indent     = 2\ccwd,
-        beforeskip = 6pt,   % 标题前的垂直间距为6pt
-        afterskip  = 6pt,   % 标题后的垂直间距为6pt
+        format     = \bf\sffamily\setfontsize{\hnu@font@subsection},
+        aftername  = \hspace{\ccwd},
+        beforeskip = 6pt,
+        afterskip  = 6pt,
     },
     subsubsection = {
-        format    = \sffamily\setfontsize{\hnu@font@normal},  % 无衬线字体，字号12.5pt
-        number    = (\arabic{subsubsection}),   % 使用阿拉伯数字显示副副节号
-        % aftername = \hspace{\ccwd},
-        beforeskip = 6pt,   % 标题前的垂直间距为6pt
-        afterskip  = 6pt,   % 标题后的垂直间距为6pt
-        % indent    = 3\ccwd,
+        format     = \sffamily\setfontsize{\hnu@font@normal},
+        number     = (\arabic{subsubsection}),                % 编号形如 (1)
+        beforeskip = 6pt,
+        afterskip  = 6pt,
     },
     paragraph = {
-        format    = \sffamily\setfontsize{\hnu@font@normal},  % 无衬线字体
-        number    = (\arabic{paragraph}),  % 使用阿拉伯数字编号，并用{}括起来
-        aftername = \hspace{\ccwd},   % 在段标题后加一个中文字符宽度的空格
-        % indent    = 3\ccwd,
+        format    = \sffamily\setfontsize{\hnu@font@normal},
+        number    = (\arabic{paragraph}),
+        aftername = \hspace{\ccwd},
     },
     subparagraph = {
-        format    = \sffamily\setfontsize{\hnu@font@normal},  % 无衬线字体，字号12.5pt
-        number    = \hnu@textcircled{subparagraph}, % 使用带圈的数字显示小段号
-        aftername = \hspace{\ccwd},   % 在小段标题后加一个中文字符宽度的空格
-        % indent    = 3\ccwd,
+        format    = \sffamily\setfontsize{\hnu@font@normal},
+        number    = \hnu@textcircled{subparagraph},           % 带圈数字
+        aftername = \hspace{\ccwd},
     },
 }
 
-% 书签
-% 定义计数器hnu@pdfbookmark，用于为章节创建PDF书签
+% \hnu@chapter[bookmark]{title}
+%   生成不带编号的章节，并在 PDF 书签中以 [bookmark] 显示（缺省时与 title 相同）。
+%   摘要、目录、致谢、参考文献等都通过它统一接入书签。
 \newcounter{hnu@pdfbookmark}
-% 定义新命令hnu@chapter，使用xparse宏包的NewDocumentCommand来处理可选参数和必需参数，o表示可选参数，m表示必需参数
 \NewDocumentCommand\hnu@chapter{o m}{%
-  % 判断是否启用了openright选项，如果是，则章节从右页开始，否则直接新起一页
   \if@openright\cleardoublepage\else\clearpage\fi%
-  % 增加PDF书签计数器的值，每次调用hnu@chapter时递增1
   \addtocounter{hnu@pdfbookmark}\@ne
-  % IfValueTF是xparse宏包的命令，判断是否存在可选参数#1，如果存在，则使用#1，否则使用#2
   \IfValueTF{#1}{%
-    % 如果提供了可选参数#1，则将其作为PDF书签的标题，并为书签设置层级为0（章级）
     \pdfbookmark[0]{#1}{hnuchapter.\thehnu@pdfbookmark}%
-    % 设置章节标记为可选参数#1
     \chaptermark{#1}%
   }{%
-    % 如果没有提供可选参数#1，则使用必需参数#2作为PDF书签的标题，并为书签设置层级为0（章级）
     \pdfbookmark[0]{#2}{hnuchapter.\thehnu@pdfbookmark}%
-    % 设置章标记为必须参数#2
     \chaptermark{#2}%
   }%
-  % 使用chapter*创建不带编号的章节标题，显示必需参数#2
   \chapter*{#2}
 }
 
@@ -508,32 +441,18 @@
         headsep=\hnu@cover@headsep,
         footskip=\hnu@cover@footskip
     }
-    \pagenumbering{gobble}  % 禁用页码显示
+    \pagenumbering{gobble}  % 封面禁用页码
 
-    \ifcase\hnu@degree@type
-      % 博士论文封面（3页）+ 声明
-      \make@cntitle@first % 生成封面第一部分
-      \clearpage
-      \make@entitle   % 生成英文封面
-      \clearpage
-      \make@cntitle@second  % 生成中文封面第二部分
-      \clearpage
+    \ifnum\hnu@degree@type<2\relax
+      % 博士 / 硕士：三页中英文封面 + 原创性声明 / 版权授权
+      \make@cntitle@first  \clearpage
+      \make@entitle        \clearpage
+      \make@cntitle@second \clearpage
       \restoregeometry
-      \make@statement % 生成原创性声明页面
-    \or
-      % 硕士论文封面（3页）+ 声明
-      \make@cntitle@first % 生成封面第一部分
-      \clearpage
-      \make@entitle   % 生成英文封面
-      \clearpage
-      \make@cntitle@second  % 生成中文封面第二部分
-      \clearpage
-      \restoregeometry
-      \make@statement % 生成原创性声明页面
-    \or
-      % 学士论文封面（单页）+ 诚信声明
-      \make@bachelor@cover
-      \clearpage
+      \make@statement
+    \else
+      % 学士：单页封面 + 诚信声明
+      \make@bachelor@cover \clearpage
       \restoregeometry
       \make@bachelor@statement
     \fi
@@ -569,6 +488,20 @@
 % 中文封面
 % 加载tabularx宏包，用于在表格中使用可调整列宽的X列类型
 \RequirePackage{tabularx}
+
+% 封面信息表共享长度：标签宽 \@tw / 内容宽 \@cw，每张封面通过 \setlength 调整
+\newlength{\@tw}
+\newlength{\@cw}
+
+% 封面信息表行格式：
+%   \hnu@coverrow{标签}{内容}   中文行（标签左对齐两端拉伸）
+%   \hnu@coverrowR{标签}{内容}  英文行（标签右对齐）
+\newcommand\hnu@coverrow[2]{%
+    \makebox[\@tw][s]{\sffamily\textbf{#1}} & \linetext{\@cw}{c}{#2} \\%
+}
+\newcommand\hnu@coverrowR[2]{%
+    \makebox[\@tw][r]{\sffamily\textbf{#1}} & \linetext{\@cw}{c}{#2} \\%
+}
 % 博士/硕士学位论文中文封面第一页
 % 布局：右上角密级与中图分类号；居中学校LOGO、论文类型、论文标题；
 %       下方研究生信息表（研究生、导师、学科、研究方向）；底部提交日期
@@ -581,16 +514,12 @@
         \tikz[remember picture,overlay]%
           \node [xshift=2.5cm,yshift=-2.5cm] at (current page.north west)%
             [below right,align=left] {%
-                \newlength{\@tw}
                 \setlength{\@tw}{75pt}   % 标签宽度
-                \newlength{\@cw}
                 \setlength{\@cw}{3cm}    % 内容宽度
                 \setfontsize{\hnu@font@normal}%
                 \begin{tabularx}{\linewidth}{lrl}%
-                    \makebox[8.5cm][c]{\qquad} &
-                    \makebox[\@tw][s]{\sffamily\textbf{密级：}} & \linetext{\@cw}{c}{\hnu@secrettext} \\%
-                    \makebox[8.5cm][c]{\qquad} &
-                    \makebox[\@tw][s]{\sffamily\textbf{中图分类号：}} & \linetext{\@cw}{c}{\hnu@clc} \\%
+                    \makebox[8.5cm][c]{\qquad} & \hnu@coverrow{密级：}{\hnu@secrettext}
+                    \makebox[8.5cm][c]{\qquad} & \hnu@coverrow{中图分类号：}{\hnu@clc}
                 \end{tabularx}
             };%
 
@@ -601,18 +530,18 @@
         % 论文标题（距页面顶部 12cm，26pt 加粗无衬线）
         \vpostext{12cm}{\bf\sffamily\setfontsize{26pt}\hnu@title}%
 
-        % 研究生信息表（距页面顶部 18cm）：研究生、导师、学科、研究方向
+        % 研究生信息表（距页面顶部 18cm）
         \tikz[remember picture,overlay]
           \node [xshift=5cm,yshift=-18cm] at (current page.north west)%
             [below right,align=left] {%
-                \setlength{\@tw}{94pt}   % 标签宽度
-                \setlength{\@cw}{6.4cm}  % 内容宽度
+                \setlength{\@tw}{94pt}
+                \setlength{\@cw}{6.4cm}
                 \setfontsize{14pt}%
                 \begin{tabular}{@{}l@{\hspace{\ccwd}}l@{}}%
-                    \makebox[\@tw][s]{\sffamily\textbf{研究生：}} & \linetext{\@cw}{c}{\hnu@author} \\%
-                    \makebox[\@tw][s]{\sffamily\textbf{导师：}} & \linetext{\@cw}{c}{\hnu@supervisor} \\%
-                    \makebox[\@tw][s]{\sffamily\textbf{学科：}} & \linetext{\@cw}{c}{\hnu@major} \\%
-                    \makebox[\@tw][s]{\sffamily\textbf{研究方向：}} & \linetext{\@cw}{c}{\hnu@workon} \\%
+                    \hnu@coverrow{研究生：}{\hnu@author}
+                    \hnu@coverrow{导师：}{\hnu@supervisor}
+                    \hnu@coverrow{学科：}{\hnu@major}
+                    \hnu@coverrow{研究方向：}{\hnu@workon}
                 \end{tabular}
             };%
 
@@ -633,19 +562,19 @@
       \tikz[remember picture,overlay]
         \node [xshift=3.2cm,yshift=-14cm] at (current page.north west)%
           [below right,align=left] {%
-              \setlength{\@tw}{128pt}  % 标签宽度
-              \setlength{\@cw}{8cm}    % 内容宽度
+              \setlength{\@tw}{128pt}
+              \setlength{\@cw}{8cm}
               \setfontsize{14pt}%
               \begin{tabular}{@{}l@{\hspace{\ccwd}}l@{}}%
-                  \makebox[\@tw][s]{\sffamily\textbf{学位类型}} & \linetext{\@cw}{c}{\hnu@degree} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{作者姓名}} & \linetext{\@cw}{c}{\hnu@author} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{作者学号}} & \linetext{\@cw}{c}{\hnu@authorid} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{学科（专业学位类别）}} & \linetext{\@cw}{c}{\hnu@major} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{研究方向（专业领域）}} & \linetext{\@cw}{c}{\hnu@workon} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{导师姓名及职称}} & \linetext{\@cw}{c}{\hnu@supervisor} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{实践导师姓名及职称}} & \linetext{\@cw}{c}{\hnu@cosupervisor} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{所在学院}} & \linetext{\@cw}{c}{\hnu@college} \\%
-                  \makebox[\@tw][s]{\sffamily\textbf{论文提交日期}} & \linetext{\@cw}{c}{\hnu@submitdate} \\%
+                  \hnu@coverrow{学位类型}{\hnu@degree}
+                  \hnu@coverrow{作者姓名}{\hnu@author}
+                  \hnu@coverrow{作者学号}{\hnu@authorid}
+                  \hnu@coverrow{学科（专业学位类别）}{\hnu@major}
+                  \hnu@coverrow{研究方向（专业领域）}{\hnu@workon}
+                  \hnu@coverrow{导师姓名及职称}{\hnu@supervisor}
+                  \hnu@coverrow{实践导师姓名及职称}{\hnu@cosupervisor}
+                  \hnu@coverrow{所在学院}{\hnu@college}
+                  \hnu@coverrow{论文提交日期}{\hnu@submitdate}
               \end{tabular}
           };%
   \end{titlepage}
@@ -658,7 +587,7 @@
         \pdfbookmark[0]{Title Page}{entitlepage}
 
         % 学位说明文字（距页面顶部 3.9cm，15pt）
-        \vpostext{3.9cm}{\setfontsize{15pt}{A Dissertation Submitted for the Doctor Degree}}%
+        \vpostext{3.9cm}{\setfontsize{15pt}\hnu@enthesisname}%
         % 英文论文标题（距页面顶部 5.9cm，22pt 加粗）
         \vpostext{5.9cm}{\setfontsize{22pt}\textbf{\hnu@entitle}}%
 
@@ -666,12 +595,12 @@
         \tikz[remember picture,overlay]
           \node [xshift=5.5cm,yshift=-18cm] at (current page.north west)%
             [below right,align=left] {%
-                \setlength{\@tw}{94pt}   % 标签宽度
-                \setlength{\@cw}{6.4cm}  % 内容宽度
+                \setlength{\@tw}{94pt}
+                \setlength{\@cw}{6.4cm}
                 \setfontsize{14pt}%
                 \begin{tabular}{@{}l@{\hspace{\ccwd}}l@{}}%
-                    \makebox[\@tw][r]{\sffamily\textbf{Candidate: }} & \linetext{\@cw}{c}{\hnu@enauthor} \\%
-                    \makebox[\@tw][r]{\sffamily\textbf{Supervisor and Rank: }} & \linetext{\@cw}{c}{\hnu@ensupervisor} \\%
+                    \hnu@coverrowR{Candidate: }{\hnu@enauthor}
+                    \hnu@coverrowR{Supervisor and Rank: }{\hnu@ensupervisor}
                 \end{tabular}
             };%
     \end{titlepage}
@@ -978,250 +907,210 @@
 % ============================================================================
 % 第10部分: 字体与图表格式
 % ============================================================================
-% 定义尺寸单位bp（big point），用于精确控制字体大小
+% 以 bp（big point，1/72 inch）为字号单位，便于按号匹配中文字号
 \newdimen\bp@ \bp@=1bp
 
-% 重定义normalsize命令
+% 正文 12bp / 行距 20bp。display 间距统一 16pt（保留原 \g@addto@macro 行为）
 \renewcommand\normalsize{%
-  \@setfontsize\normalsize{12\bp@}{20\bp@}% % 设置正文字体大小为12bp，行距为20bp
-    % 以下设置于数学公式的垂直间距有关
-  \abovedisplayskip 12\bp@ \@plus3\bp@ \@minus7\bp@ % 普通公式上方间距：默认值为12bp，可扩展至15bp，可收缩至5bp
-  \abovedisplayshortskip \z@ \@plus3\bp@  % 段公式上方间距：默认值为0bp，可扩展至3bp
-  \belowdisplayshortskip 6.5\bp@ \@plus3.5\bp@ \@minus3\bp@ % 段公式下方间距：默认值为6.5bp，可扩展至10bp，可收缩至3.5bp
-  \belowdisplayskip \abovedisplayskip % 普通公式下方间距设置为与上方相同
-  \let\@listi\@listI  % 使用标准的列表缩进格式
-} 
-\normalsize % 应用normalsize命令
+  \@setfontsize\normalsize{12\bp@}{20\bp@}%
+  \setlength\abovedisplayskip{16pt}%
+  \setlength\abovedisplayshortskip{16pt}%
+  \setlength\belowdisplayshortskip{16pt}%
+  \setlength\belowdisplayskip{16pt}%
+  \let\@listi\@listI
+}
+\normalsize
 
-% 重定义small命令
 \renewcommand\small{%
-    \@setfontsize\small{10.5\bp@}{17.5\bp@}%  % 设置字体大小为10.5bp，行距为17.5bp
-    % 以下设置于数学公式的垂直间距有关
-    \abovedisplayskip 10.5\bp@ \@plus3\bp@ \@minus6\bp@ % 普通公式上方间距：默认值为10.5bp，可扩展至13.5bp，可收缩至4.5bp
-    \abovedisplayshortskip \z@ \@plus3\bp@  % 段公式上方间距：默认值为0bp，可扩展至3bp
-    \belowdisplayshortskip 6.5\bp@ \@plus3.5\bp@ \@minus3\bp@ % 段公式下方间距：默认值为6.5bp，可扩展至10bp，可收缩至3.5bp
-    % 定义列表格式
-    \def\@listi{\leftmargin\leftmargini % 使用默认的左边距
-                \topsep 9\bp@ \@plus3\bp@ \@minus5\bp@  % 列表顶部间距：默认值为9bp，可扩展至12bp，可收缩至4bp
-                \parsep 4.5\bp@ \@plus2\bp@ \@minus\bp@ % 段落间距：默认值为4.5bp，可扩展至6.5bp，可收缩至3.5bp
-                \itemsep \parsep  % 设置项目间距等于段落间距
-    }%  
-    \belowdisplayskip \abovedisplayskip % 普通公式下方间距设置为与上方相同
+    \@setfontsize\small{10.5\bp@}{17.5\bp@}%
+    \abovedisplayskip 10.5\bp@ \@plus3\bp@ \@minus6\bp@
+    \abovedisplayshortskip \z@ \@plus3\bp@
+    \belowdisplayshortskip 6.5\bp@ \@plus3.5\bp@ \@minus3\bp@
+    \def\@listi{\leftmargin\leftmargini
+                \topsep 9\bp@ \@plus3\bp@ \@minus5\bp@
+                \parsep 4.5\bp@ \@plus2\bp@ \@minus\bp@
+                \itemsep \parsep
+    }%
+    \belowdisplayskip \abovedisplayskip
 }
 
-% 重新定义\footnotesize命令
-\renewcommand\footnotesize{%  
-    \@setfontsize\footnotesize{9\bp@}{15\bp@} % 设置字体大小为9bp，行距为15bp
-    % 以下设置于数学公式的垂直间距有关
-    \abovedisplayskip 9\bp@ \@plus2\bp@ \@minus5\bp@  % 普通公式上方间距：默认值为9bp，可扩展至11bp，可收缩至4bp
-    \abovedisplayshortskip \z@ \@plus3\bp@  % 短公式上方间距：默认值为0bp，可扩展至3bp
-    \belowdisplayshortskip 6\bp@ \@plus3\bp@ \@minus3\bp@ % 短公式下方间距：默认值为6bp，可扩展至9bp，可收缩至3bp
-    % 定义列表格式
-    \def\@listi{\leftmargin\leftmargini % 使用默认的左边距
-                \topsep 6\bp@ \@plus2\bp@ \@minus2\bp@  % 列表顶部间距：默认值为6bp，可扩展至8bp，可收缩至4bp
-                \parsep 3\bp@ \@plus2\bp@ \@minus\bp@   % 段落间距：默认值为3bp，可扩展至5bp，可收缩至2bp
-                \itemsep \parsep  % 设置项目间距等于段落间距
-    }% 
-    \belowdisplayskip \abovedisplayskip % 普通公式下方间距设置为与上方相同
+\renewcommand\footnotesize{%
+    \@setfontsize\footnotesize{9\bp@}{15\bp@}
+    \abovedisplayskip 9\bp@ \@plus2\bp@ \@minus5\bp@
+    \abovedisplayshortskip \z@ \@plus3\bp@
+    \belowdisplayshortskip 6\bp@ \@plus3\bp@ \@minus3\bp@
+    \def\@listi{\leftmargin\leftmargini
+                \topsep 6\bp@ \@plus2\bp@ \@minus2\bp@
+                \parsep 3\bp@ \@plus2\bp@ \@minus\bp@
+                \itemsep \parsep
+    }%
+    \belowdisplayskip \abovedisplayskip
 }
 
-% 重新定义\scriptsize命令，设置字体大小为7.5bp，行距为12.5bp，通常用于上标、下标或非常小的注释文本
 \renewcommand\scriptsize{\@setfontsize\scriptsize{7.5\bp@}{12.5\bp@}}
-% 重新定义\tiny命令，设置字体大小为6.5bp，行距为10.83bp，这是最小的预定义字体大小，用于极小的文本
 \renewcommand\tiny{\@setfontsize\tiny{6.5\bp@}{10.83\bp@}}
-% 重新定义\large命令，设置字体大小为15bp，行距为25bp，用于稍大于正常大小的文本，如小节标题
 \renewcommand\large{\@setfontsize\large{15\bp@}{25\bp@}}
-% 重新定义\Large命令，设置字体大小为18bp，行距为30bp，用于更大的文本，如节标题
 \renewcommand\Large{\@setfontsize\Large{18\bp@}{30\bp@}}
-% 重新定义\LARGE命令，设置字体大小为22bp，行距为36.67bp，用于大型标题或强调文本
 \renewcommand\LARGE{\@setfontsize\LARGE{22\bp@}{36.67\bp@}}
-% 重新定义\huge命令，设置字体大小为24bp，行距为40bp，用于非常大的标题或特别强调的文本
 \renewcommand\huge{\@setfontsize\huge{24\bp@}{40\bp@}}
-% 重新定义\Huge命令，设置字体大小为26bp，行距为43.33bp，这是最大的预定义字体大小，用于最大的标题或极度强调的文本
 \renewcommand\Huge{\@setfontsize\Huge{26\bp@}{43.33\bp@}}
 
-% 排版风格，标题，图表
-\setlength{\parindent}{2\ccwd}  % 设置段落首行缩进为两个中文字符宽度
-\setlength{\parskip}{\z@}   % 设置段落间距为0
-\RequirePackage{upgreek}    % 引入upgreek宏包，用于提供额外的希腊字母
-\renewcommand\pi{\uppi}   % 重定义\pi命令，使用直立体的π符号
-\RequirePackage{amssymb}  % 引入amssymb宏包，用于提供额外的数学符号
-% 重新定义小于等于和大于等于符号
-\renewcommand\le{\leqslant}
+% 段落与数学符号
+\setlength{\parindent}{2\ccwd}
+\setlength{\parskip}{\z@}
+\RequirePackage{upgreek}
+\renewcommand\pi{\uppi}                              % 直立体 π
+\RequirePackage{amssymb}
+\renewcommand\le{\leqslant}                          % ≤ 用斜杠形式
 \renewcommand\leq{\leqslant}
 \renewcommand\ge{\geqslant}
 \renewcommand\geq{\geqslant}
-% 设置不同尺寸的数学字体大小，参数分别是：文本大小，数学显示大小、上下标大小、次级上下标大小
-\DeclareMathSizes{10.5bp}{10.5bp}{7.35bp}{5.25bp}
-% 调整浮动体的参数
-\renewcommand{\topfraction}{.85}  % 页面顶部最大可占用的浮动体比例
-\renewcommand{\bottomfraction}{.65} % 页面底部最大可占用的浮动体比例
-\renewcommand\textfraction{.15}   % 页面必须由文本占用的最小比例
-\renewcommand{\floatpagefraction}{.6} % 浮动页面被占满的最小比例
-% 引入caption宏包，用于设置图表标题格式
+\DeclareMathSizes{10.5bp}{10.5bp}{7.35bp}{5.25bp}    % 文本/显示/上下标/次级
+
+% 浮动体放置阈值
+\renewcommand{\topfraction}{.85}
+\renewcommand{\bottomfraction}{.65}
+\renewcommand\textfraction{.15}
+\renewcommand{\floatpagefraction}{.6}
+
+% 图表标题：悬挂格式、小号加粗、标签后空一个中文字宽
 \RequirePackage{caption}
-% yinru calc 宏包，用于计算
 \RequirePackage{calc}
-% 定义新的标题标签分隔符zhspace，使用一个中文字符的宽度作为间距
 \DeclareCaptionLabelSeparator{zhspace}{\hspace{\ccwd}}
-\captionsetup{  % 设置所有标题的通用格式
-    format = hang,  % 使用悬挂缩进格式
-    font = {small,bf},  % 使用小号加粗字体
-    labelsep = zhspace, % 使用前面定义的zhspace作为标签分隔符
+\captionsetup{
+    format   = hang,
+    font     = {small,bf},
+    labelsep = zhspace,
 }
-\captionsetup[figure]{  % 专门为图片（figure）设置标题格式
-    position = bottom,  % 标题谓语图片下方
-    aboveskip = 6bp,  % 图片与标题之间的间距为6bp
-    belowskip = {12bp-\intextsep},  % 标题与后续内容之间的距离为12bp减去intextsep（文本间距）
+\captionsetup[figure]{
+    position  = bottom,
+    aboveskip = 6bp,
+    belowskip = {12bp-\intextsep},
 }
-\captionsetup[table]{ % 专门为表格（table）设置标题格式
-    position = top, % 标题位于表格上方
-    aboveskip = 6bp,  % 标题与表格之前内容之间的距离为6bp
-    belowskip = 6bp,  % 标题与表格之间的距离为6bp
+\captionsetup[table]{
+    position  = top,
+    aboveskip = 6bp,
+    belowskip = 6bp,
 }
-% 定义新命令\note 用于添加注释
+% \note{...}：图表下方的"注："说明，悬挂缩进 2 字
 \newcommand\note[1]{%
-    \captionsetup{  % 设置注释样式
-        position = bottom,  % 位置在底部
-        font = small  % 使用小号字体
-    } 
-    \caption*{  % 创建注释
-        \hangindent=2\ccwd  % 设置悬挂缩进为2个中文字符宽度
-        \relax  % 取消缩进
-        \hnu@notesname  % 插入预定义的注释名称（如“注：”）
-        \rmfamily % 使用罗马字体
-        #1  % 注释内容
+    \captionsetup{position = bottom, font = small}
+    \caption*{%
+        \hangindent=2\ccwd
+        \relax
+        \hnu@notesname
+        \rmfamily
+        #1
     }
 }
-% 自定义脚注样式，重新定义脚注编号为圆圈包围的数字
+
+% 脚注：编号为带圈数字、分隔线宽 25%、首行缩进 2 字
 \renewcommand{\thefootnote}{\hnu@textcircled{footnote}}
-% 重定义脚注分隔线
 \renewcommand\footnoterule{%
-    \kern-3\p@  % 向上移动3点
-    \hrule\@width.25\textwidth  % 绘制宽度为文本宽度25%的水平线
-    \kern2.6\p@ % 向下移动2.6点
+    \kern-3\p@
+    \hrule\@width.25\textwidth
+    \kern2.6\p@
 }
-% 重定义脚注文本格式
 \renewcommand\@makefntext[1]{%
-    \parindent 2\ccwd%  % 设置段落缩进为两个中文字符宽度
-    \noindent % 取消缩进
-    \hb@xt@2\ccwd{  % 创建脚注标记盒子
-        \hss\@makefnmark  % 右对齐脚注标记
-    }
-    #1  % 脚注内容
+    \parindent 2\ccwd%
+    \noindent
+    \hb@xt@2\ccwd{\hss\@makefnmark}
+    #1
 }
 
 % ============================================================================
 % 第11部分: 参考文献
 % ============================================================================
-% 引入natbib包，用于管理参考文献
 \RequirePackage[sort&compress]{natbib}
-% 定义不同的参考文献样式
-\newcommand\bibstyle@super{\bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}} % 定义上标引用样式
-\newcommand\bibstyle@numbers{\bibpunct{[}{]}{,}{n}{,}{,}} % 定义数字引用样式
-\newcommand\bibstyle@authoryear{\bibpunct{(}{)}{;}{a}{,}{,}}  % 定义作者-年份引用样式
-% 定义用于比较的临时变量
-\def\tmp@numerical{numerical} 
-\def\tmp@authoryear{authoryear}
-% 定义湖南工程学院自定义的参考文献样式命令
-\newcommand\hnubibstyle[1]{%
-    % 将输入参数存储在临时变量中
-    \def\tmp@gbt{#1}%
-    % 如果输入参数是“numerical”，则使用数字引用样式
-    \ifx\tmp@gbt\tmp@numerical%
-      \bibliographystyle{hnunumerical}%
-    \fi%
-}
-\if@hnu@numerical % 如果使用数字引用样式
-  \if@hnu@super % 如果使用上标引用样式
-    \citestyle{super} % 设置引用样式为上标
-  \else % 如果不使用上标引用样式
-    \citestyle{numbers} % 设置引用样式为数字
+
+% 三种引用方括号 / 圆括号、连接符、压缩规则
+\newcommand\bibstyle@super{\bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
+\newcommand\bibstyle@numbers{\bibpunct{[}{]}{,}{n}{,}{,}}
+\newcommand\bibstyle@authoryear{\bibpunct{(}{)}{;}{a}{,}{,}}
+\if@hnu@numerical
+  \if@hnu@super
+    \citestyle{super}
+  \else
+    \citestyle{numbers}
   \fi
-  % 设置参考文献样式为湖南工程学院数字样式
   \bibliographystyle{hnunumerical}%
-\else % 如果不使用数字引用样式
-  \citestyle{authoryear}  % 设置引用样式为作者-年份
-  % 设置参考文献样式为湖南工程学院作者-年份样式
+\else
+  \citestyle{authoryear}
   \bibliographystyle{hnuauthoryear}%
 \fi
 
-% 引用
-% 修改\NAT@citexnum命令，使其支持上标引用
+% 以下三处 patch / 重定义都是为了让 prenote / postnote 出现在右括号 *外面*
+% 并以上标形式显示（与国标 GB/T 7714 的"[1]^a"风格一致），覆盖 natbib 默认行为。
+
+% \cite[postnote]{...} —— 数字引用主入口
 \patchcmd\NAT@citexnum
-% 原代码
 {%
-  \@ifnum{\NAT@ctype=\z@}{% % 如果引用类型是数字
-    \if*#2*\else\NAT@cmt#2\fi % 如果有注释，添加注释
+  \@ifnum{\NAT@ctype=\z@}{%
+    \if*#2*\else\NAT@cmt#2\fi
   }{}%
-  \NAT@mbox{\NAT@@close}% % 添加结束括号
+  \NAT@mbox{\NAT@@close}%
 }
-% 新代码
 {%
-  \NAT@mbox{\NAT@@close}% % 首先添加结束括号
-  \@ifnum{\NAT@ctype=\z@}{% % 如果引用类型是数字
-    \if*#2*\else\textsuperscript{#2}\fi % 如果有注释，作为上标添加
+  \NAT@mbox{\NAT@@close}%
+  \@ifnum{\NAT@ctype=\z@}{%
+    \if*#2*\else\textsuperscript{#2}\fi
   }{}%
-}{}{} % 成功和失败是的操作（此处为空）
+}{}{}
 
-% 重定义上标引用命令
-\renewcommand\NAT@citesuper[3]{%  % #1=引用编号，#2=前缀，#3=后缀
-    \ifNAT@swa  % 如果启用了作者-年份选项
-        \if*#2*\else#2\NAT@spacechar\fi % 如果有前缀，添加前缀和空格
-        \unskip\kern\p@\textsuperscript{\NAT@@open#1\NAT@@close\if*#3*\else#3\fi}%  % 添加上标
-    \else 
-        #1%  % 如果没有启用作者-年份选项，直接输出引用编号
-    \fi
-    \endgroup
-}
-
-% 重新定义数字引用命令
-\renewcommand\NAT@citenum[3]{%  % #1=引用编号，#2=前缀，#3=后缀
-    \ifNAT@swa  % 如果启用了作者-年份选项
-        \NAT@@open  % 添加开始括号
-        \if*#2*\else#2\NAT@spacechar\fi % 如果有前缀，添加前缀和空格
-        #1\NAT@@close % 添加引用编号和结束括号
-        \if*#3*\else\textsuperscript{#3}\fi % 如果有后缀，作为上标添加
+% 上标引用：[1]^postnote
+\renewcommand\NAT@citesuper[3]{%
+    \ifNAT@swa
+        \if*#2*\else#2\NAT@spacechar\fi
+        \unskip\kern\p@\textsuperscript{\NAT@@open#1\NAT@@close\if*#3*\else#3\fi}%
     \else
-        #1% % 如果没有启用作者-年份选项，只显示引用编号
+        #1%
     \fi
     \endgroup
 }
 
-% 修改 \NAT@citex命令，用于一般引用
+% 行内数字引用：[1]^postnote
+\renewcommand\NAT@citenum[3]{%
+    \ifNAT@swa
+        \NAT@@open
+        \if*#2*\else#2\NAT@spacechar\fi
+        #1\NAT@@close
+        \if*#3*\else\textsuperscript{#3}\fi
+    \else
+        #1%
+    \fi
+    \endgroup
+}
+
+% \cite[postnote]{...} —— 通用入口（作者-年份等）
 \patchcmd{\NAT@citex}
-% 原代码
 {%
-  \if*#2*\else\NAT@cmt#2\fi % 如果有注释，添加注释
-  \if\relax\NAT@date\relax\else\NAT@@close\fi % 如果有日期，添加结束括号
+  \if*#2*\else\NAT@cmt#2\fi
+  \if\relax\NAT@date\relax\else\NAT@@close\fi
 }
-% 新代码
 {%
-  \if\relax\NAT@date\relax\else\NAT@@close\fi % 如果有日期，添加结束括号
-  \if*#2*\else\textsuperscript{#2}\fi % 如果有注释，作为上标添加
-}{}{} % 成功和失败时的操作（此处为空）
+  \if\relax\NAT@date\relax\else\NAT@@close\fi
+  \if*#2*\else\textsuperscript{#2}\fi
+}{}{}
 
-% 重新定义一般引用命令
-\renewcommand\NAT@cite[3]{% % #1=引用内容，#2=前缀，#3=后缀
-    \ifNAT@swa  % 如果启用了作者-年份选项
-        \NAT@@open  % 添加开始括号
-        \if*#2*\else#2\NAT@spacechar\fi % 如果有前缀，添加前缀和空格
-        #1\NAT@@close % 添加引用内容和结束括号
-        \if*#3*\else\textsuperscript{#3}\fi % 如果有后缀，作为上标添加
+\renewcommand\NAT@cite[3]{%
+    \ifNAT@swa
+        \NAT@@open
+        \if*#2*\else#2\NAT@spacechar\fi
+        #1\NAT@@close
+        \if*#3*\else\textsuperscript{#3}\fi
     \else
-        #1%  % 如果没有启用作者-年份选项，只显示引用内容
+        #1%
     \fi
     \endgroup
 }
 
-% 重定义参考文献字体，使用正常字体，大小为五号字体，行距为13pt
+% 参考文献：五号字体、行距 13pt、零段间距、悬挂缩进 2 个中文字符
 \renewcommand\bibfont{\normalfont\fontsize{10.5pt}{13pt}\selectfont}
-\setlength{\bibsep}{0bp}  % 设置参考文献条目之间的垂直间距为0bp
-\setlength{\bibhang}{2\ccwd}  % 设置参考文献条目的缩进为两个中文字符宽度
-% 重定义参考文献标签的格式
-\renewcommand\@biblabel[1]{[#1]\hfill}  % 将标签放在方括号中，并右对齐
-\urlstyle{same} % 设置所有URL的字体样式与正文相同
-% 为URL添加更多的断行点，允许在所有字母和数字后断行
+\setlength{\bibsep}{0bp}
+\setlength{\bibhang}{2\ccwd}
+\renewcommand\@biblabel[1]{[#1]\hfill}                % [n] 编号、右对齐
+\urlstyle{same}
+% 允许 URL 在任意字母 / 数字后断行
 \g@addto@macro\UrlBreaks{%
   \do\a\do\b\do\c\do\d\do\e\do\f\do\g\do\h\do\i\do\j%
   \do\k\do\l\do\m\do\n\do\o\do\p\do\q\do\r\do\s\do\t%
@@ -1231,38 +1120,29 @@
   \do\U\do\V\do\W\do\X\do\Y\do\Z%
   \do\1\do\2\do\3\do\4\do\5\do\6\do\7\do\8\do\9\do\0%
 }
-% 重定义参考文献章级格式
+% 参考文献章级标题：临时退出 mainmatter 以避免影响页码与章号
 \renewcommand\bibsection{%
-    \@mainmatterfalse % 临时关闭主题内容标志
-    \chapter{\bibname}% % 创建一个新的章，标题为“参考文献”
-    \@mainmattertrue  % 恢复主体内容标志
+    \@mainmatterfalse
+    \chapter{\bibname}%
+    \@mainmattertrue
 }
 
 % ============================================================================
 % 第12部分: 数学环境
 % ============================================================================
-% 数学符号：
-% 引入amsmath（提供增强的数学排版功能）和amsthm（提供定理环境的支持）宏包
 \RequirePackage{amsmath,amsthm}
-\makeatletter % 开始一个LaTex内部命令定义区块
-% 向\normalsize命令添加额外的设置，用于调整数学公式的垂直间距
-\g@addto@macro\normalsize{%
-  \setlength\abovedisplayskip{16pt} % 设置普通数学显示（display math）上方的垂直空间为16pt
-  \setlength\belowdisplayskip{16pt} % 设置普通数学显示下方的垂直空间为16pt
-  \setlength\abovedisplayshortskip{16pt}  % 设置短数学显示（可能只有一行）上方的垂直空间为16pt
-  \setlength\belowdisplayshortskip{16pt}  % 设置短数学显示下方的垂直空间为16pt
-}
+% 注：数学公式的 \abovedisplayskip 等已在 \renewcommand\normalsize（第 10 部分）
+% 中按字号分别设置，此处不再统一覆盖。
 
-% 数学定理：
-% 以下定义数学定理环境默认风格为 hnuplain。
+% 定理风格 hnuplain：标题黑体，定理体首行缩进 2 字，标题与正文间空 1 字
 \newtheoremstyle{hnuplain}%
-    {}{}% % 定理前后的垂直空白：都设为默认
-    {}{2\ccwd}% % 定理主体的缩进两：无缩进
-    {\bfseries}{}%  % 定理主体的段间距：两个中文字符宽度
-    {\ccwd}{} % 定理头后的空白：一个中文字符宽度；定理附注的字体：默认
-\theoremstyle{hnuplain} % 将当前的定理样式设置为刚刚定义的hnuplain
+    {}{}%
+    {}{2\ccwd}%
+    {\bfseries}{}%
+    {\ccwd}{}
+\theoremstyle{hnuplain}
 
-% 定义各种数学结构的中文名称
+% 定理类中文名
 \newcommand\hnu@assertionname{断言}
 \newcommand\hnu@axiomname{公理}
 \newcommand\hnu@corollaryname{推论}
@@ -1273,83 +1153,68 @@
 \newcommand\hnu@propositionname{命题}
 \newcommand\hnu@remarkname{注}
 \newcommand\hnu@theoremname{定理}
-% 定义新的定理环境，[chapter]表示每章重新编号
+
+% 与 theorem 共用编号、按章重置
 \newtheorem{theorem}                {\hnu@theoremname}     [chapter]
-% 定义其他定理环境，[theorem]表示与定理共用编号
 \newtheorem{assertion}  [theorem]   {\hnu@assertionname}
 \newtheorem{axiom}      [theorem]   {\hnu@axiomname}
 \newtheorem{corollary}  [theorem]   {\hnu@corollaryname}
 \newtheorem{lemma}      [theorem]   {\hnu@lemmaname}
 \newtheorem{proposition}[theorem]   {\hnu@propositionname}
-% 定义单独编号的环境
+% 独立编号
 \newtheorem{definition}             {\hnu@definitionname}  [chapter]
 \newtheorem{example}                {\hnu@examplename}     [chapter]
-% 定义不编号的环境
+% 不编号
 \newtheorem*{remark}                {\hnu@remarkname}
-% \pkg{amsthm} 单独定义了 proof 环境，这里重新定义以满足格式要求。
-% 原本模仿 \pkg{amsthm} 写成 |\item[\hskip\labelsep\hskip2\ccwd #1\hskip\ccwd]|，
-% 但是却会多出一些间隙。
 
-% 重新定义证明环境
+% 重写 amsthm 的 proof，使首行缩进 2 字、标题加粗
 \renewenvironment{proof}[1][\proofname]{
-    \par  % 开始新段落
-    \pushQED{\qed}% % 将QED符号推入堆栈，以便在证明结束时使用
-    \normalfont % 设置为正常字体 
-    \topsep6\p@\@plus6\p@\relax % 设置顶部间距，允许额外的6pt弹性空间
-    \trivlist % 开始一个简单列表环境
-        \item\relax % 添加一个列表项
-        \hskip2\ccwd  % 水平空格，宽度为两个中文字符
-        \textbf{#1} % 以粗体显示参数（默认为“证明”）
-        \hskip\ccwd\ignorespaces  % 添加一个中文字符宽度的空格，忽略后续空白
-    }{% % 环境结束的定义
-    \popQED % 弹出QED符号并显示
-    \endtrivlist  % 结束简单列表环境
-    \@endpefalse  % 禁止在段落末尾添加额外的垂直空间
+    \par
+    \pushQED{\qed}%
+    \normalfont
+    \topsep6\p@\@plus6\p@\relax
+    \trivlist
+        \item\relax
+        \hskip2\ccwd
+        \textbf{#1}
+        \hskip\ccwd\ignorespaces
+    }{%
+    \popQED
+    \endtrivlist
+    \@endpefalse
 }
-% 将\proofname重定义为之前设置的中文“证明”
 \renewcommand\proofname\hnu@proofname
 
 % ============================================================================
 % 第13部分: 算法与代码
 % ============================================================================
-% 算法和代码：
-% 引入algorithm2e宏包，用于排版算法
-\RequirePackage[
-    algoruled,  % 使用带框的算法样式
-    algochapter,  % 算法编号包含章节号
-    lined,  % 为算法添加行号
-    linesnumbered % 显示行号
-]{algorithm2e}
-% 重新定义算法名称为中文“算法”
+% 算法：带框、按章编号、显示行号
+\RequirePackage[algoruled, algochapter, lined, linesnumbered]{algorithm2e}
 \renewcommand{\algorithmcfname}{算法}
-% 引入listings宏包，用于代码列表显示
+
+% 代码清单
 \RequirePackage{listings}
-% 设置代码列表的全局样式
 \lstset{
-    basicstyle=\small\ttfamily, % 使用小号等宽字体
-    xleftmargin=2pc,  % 左边距为2个字符宽度
-    xrightmargin=2pc, % 右边距为2个字符宽度
-    frame=single, % 添加单线框
-    columns=flexible, % 灵活调整列宽，适应不同字符宽度
-    numbers=left, % 在左侧显示行号
+    basicstyle=\small\ttfamily,
+    xleftmargin=2pc,
+    xrightmargin=2pc,
+    frame=single,
+    columns=flexible,
+    numbers=left,
 }
-% 定义命令用于记住当前算法的行号
-\newcommand{\rememberlines}{
-    \xdef\rememberedlines{\number\value{AlgoLine}}
-}
-% 定义命令用于恢复之前记住的行号
-\newcommand{\resumenumbering}{
-    \setcounter{AlgoLine}{\rememberedlines}
-}
-% 引入tcolorbox宏包的skins库，用于创建高度可定制的彩色盒子
+
+% \rememberlines / \resumenumbering：跨 algorithm 块继续行号
+\newcommand{\rememberlines}{\xdef\rememberedlines{\number\value{AlgoLine}}}
+\newcommand{\resumenumbering}{\setcounter{AlgoLine}{\rememberedlines}}
+
+% talgorithm：可向左右扩宽的浮动算法盒，便于宽算法溢出版心
 \RequirePackage[skins]{tcolorbox}
-% 定义新的tcolorbox环境talgorithm，用于排版算法
 \newtcolorbox{talgorithm}[2][]{%
-  blanker,  % 使用空白样式
-  float=tbp,  % 允许浮动（顶部、底部或页面）
-  grow to left by=#2, % 向左扩展的宽度
-  grow to right by=#2,  % 向右扩展的宽度
-  before upper={\begin{algorithm}[H]},  % 在内容前开始algorithm环境
-  after upper={\end{algorithm}},  % 在内容后结束algorithm环境
-  #1  % 允许额外的自定以选项
+  blanker,
+  float=tbp,
+  grow to left by=#2,
+  grow to right by=#2,
+  before upper={\begin{algorithm}[H]},
+  after upper={\end{algorithm}},
+  #1
 }
