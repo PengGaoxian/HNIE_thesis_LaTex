@@ -716,8 +716,8 @@
         [below right,align=left]{%
           \setfontsize{16pt}[36bp]%
           \begin{tabular}{@{}l@{\hspace{0em}}l@{}}%
-            \sffamily\textbf{题\qquad 目：} & \linetext{\@bcw}{c}{\hnu@title@lineA} \\%
-            \sffamily\textbf{\qquad\quad} & \linetext{\@bcw}{c}{\hnu@title@lineB} \\%
+            \sffamily\textbf{题\qquad 目：} & \linetext{\@bcw}{c}{\rmfamily\kaishu\hnu@title@lineA} \\%
+            \sffamily\textbf{\qquad\quad} & \linetext{\@bcw}{c}{\rmfamily\kaishu\hnu@title@lineB} \\%
           \end{tabular}
         };%
 
@@ -727,13 +727,13 @@
         [below right,align=left]{%
           \setfontsize{16pt}[36bp]%
           \begin{tabular}{@{}l@{}}
-            \sffamily\textbf{学院：}\linetext{12.7cm}{c}{\hnu@college} \\%
-            \sffamily\textbf{专业：}\linetext{4.2cm}{c}{\hnu@major}%
-            \hspace{0.2em}\sffamily\textbf{班级：}\linetext{1.2cm}{c}{\hnu@class}%
-            \hspace{0.2em}\sffamily\textbf{学号：}\linetext{3.33cm}{c}{\hnu@authorid} \\%
-            \sffamily\textbf{学生姓名：}\linetext{\@bcw}{c}{\hnu@author} \\%
-            \sffamily\textbf{导师姓名：}\linetext{\@bcw}{c}{\hnu@supervisor} \\%
-            \sffamily\textbf{完成日期：}\linetext{\@bcw}{c}{\hnu@submitdate}%
+            \sffamily\textbf{学院：}\linetext{12.7cm}{c}{\kaishu\hnu@college} \\%
+            \sffamily\textbf{专业：}\linetext{4.2cm}{c}{\kaishu\hnu@major}%
+            \hspace{0.2em}\sffamily\textbf{班级：}\linetext{1.2cm}{c}{\rmfamily\hnu@class}%
+            \hspace{0.2em}\sffamily\textbf{学号：}\linetext{3.33cm}{c}{\rmfamily\hnu@authorid} \\%
+            \sffamily\textbf{学生姓名：}\linetext{\@bcw}{c}{\kaishu\hnu@author} \\%
+            \sffamily\textbf{导师姓名：}\linetext{\@bcw}{c}{\kaishu\hnu@supervisor} \\%
+            \sffamily\textbf{完成日期：}\linetext{\@bcw}{c}{\rmfamily\kaishu\hnu@submitdate}%
           \end{tabular}
         };
   \end{titlepage}%
