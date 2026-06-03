@@ -705,7 +705,7 @@
     \hnu@split@title
 
     % 学校LOGO
-    \vpostext{3.5cm}{\includegraphics[height=1.8cm]{figures/hnie-logo.png}}
+    \vpostext{3.5cm}{\includegraphics[height=1.45cm]{figures/hnie-logo-app.png}}
 
     % 论文类型标题
     \vpostext{7cm}{\bf\sffamily\setfontsize{36pt}\hnu@thesisname}
@@ -727,10 +727,10 @@
         [below right,align=left]{%
           \setfontsize{16pt}[36bp]%
           \begin{tabular}{@{}l@{}}
-            \sffamily\textbf{学院：}\linetext{12.7cm}{c}{\kaishu\hnu@college} \\%
-            \sffamily\textbf{专业：}\linetext{4.2cm}{c}{\kaishu\hnu@major}%
-            \hspace{0.2em}\sffamily\textbf{班级：}\linetext{1.2cm}{c}{\rmfamily\hnu@class}%
-            \hspace{0.2em}\sffamily\textbf{学号：}\linetext{3.33cm}{c}{\rmfamily\hnu@authorid} \\%
+            % \sffamily\textbf{学院：}\linetext{12.7cm}{c}{\kaishu\hnu@college} \\%
+            % \sffamily\textbf{专业：}\linetext{4.2cm}{c}{\kaishu\hnu@major}%
+            \sffamily\textbf{专业班级：}\linetext{5cm}{c}{\rmfamily\hnu@class}%
+            \hspace{0.2em}\sffamily\textbf{学号：}\linetext{4.55cm}{c}{\rmfamily\hnu@authorid} \\%
             \sffamily\textbf{学生姓名：}\linetext{\@bcw}{c}{\kaishu\hnu@author} \\%
             \sffamily\textbf{导师姓名：}\linetext{\@bcw}{c}{\kaishu\hnu@supervisor} \\%
             \sffamily\textbf{完成日期：}\linetext{\@bcw}{c}{\rmfamily\kaishu\hnu@submitdate}%
@@ -794,7 +794,7 @@
     % \setcounter{page}{1}
     \addtocontents{toc}{\protect\contentsline{chapter}{\hnu@abstractname}{\thepage}{}}%
     % 论文题目（居中，黑体，小二 18pt，固定行距 22pt，段前段后各 1 行）
-    % \vspace*{\hnu@font@normal@leading}
+    % \vspace{12pt}
     \begin{center}
       {\sffamily\bfseries\setfontsize{18pt}[\hnu@font@normal@leading]\hnu@title}
     \end{center}
@@ -1143,7 +1143,7 @@
 \theoremstyle{hnuplain}
 
 % 定理类中文名
-\newcommand\hnu@assertionname{断言}
+\newcommand\hnu@assertionname{假设}
 \newcommand\hnu@axiomname{公理}
 \newcommand\hnu@corollaryname{推论}
 \newcommand\hnu@definitionname{定义}

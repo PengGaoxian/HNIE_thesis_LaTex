@@ -2,7 +2,7 @@
 %!TEX program = xelatex
 
 % 论文类型：doctor=博士, master=硕士, bachelor=学士
-\documentclass[bachelor]{hnuthesis}
+\documentclass[bachelor]{hnuthesis-yingyuan}
 \usepackage{subfigure}
 \usepackage{amsmath}
 \usepackage{algorithmicx,algpseudocode}
@@ -50,21 +50,22 @@
 % 封面、原创性声明
 \maketitle
 
-% 摘要
-\input{chapters/abstract}
 % 目录
 \tableofcontents
-% 插图附表索引
-\begingroup
-    \renewcommand*{\addvspace}[1]{}
-        \phantomsection
-        \listoffigures
-        \newpage
+% % 插图附表索引
+% \begingroup
+%     \renewcommand*{\addvspace}[1]{}
+%         \phantomsection
+%         \listoffigures
+%         \newpage
 
-        \phantomsection
-        \listoftables
-        \newpage
-\endgroup
+%         \phantomsection
+%         \listoftables
+%         \newpage
+% \endgroup
+
+% 摘要
+\input{chapters/abstract}
 
 % 正文章节
 \mainmatter
